@@ -1,0 +1,368 @@
+<div class="container main background-green">
+  <div class="text-center">
+  <span class="dateClass"
+    ><i class="fa fa-calendar"></i> Date: {{ today | date : "short" }}</span>
+  <div class="header">
+    <h1>TODO LIST <i class="fa fa-pencil"></i></h1>
+  </div>
+</div>
+  <div class="main-container">
+    <!-- Select All -->
+      <span class="dateClass">
+        <label class="checkbox-inline"
+          ><input type="checkbox" [(ngModel)]="checkboxValue" (change)="onCheckboxChange()" />
+          <span> Select All</span>
+          </label
+        >
+      </span>
+       <!-- End Select All -->
+    <div class="content">
+      <!-- Table -->
+      <table class="table">
+        <!-- Table header -->
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">Id</th>
+            <th scope="col" class="text-center">Task Name</th>
+            <th scope="col" class="text-center">Status</th>
+            <th scope="col" class="text-center">DeadLine</th>
+            <th scope="col" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <!-- table data show here -->
+        <!-- Also Added pagination -->
+        <tbody *ngFor="let task of toDoList | paginate: { itemsPerPage: count, currentPage: p }">
+          <!-- text-decoration-line apply here -->
+          <tr [class.completed]="task.taskStatus == 'Completed'">
+            <td scope="row" class="text-center">{{ task.id }}</td>
+            <td class="text-center">{{ task.taskName }}</td>
+            <!-- option selection here dynamic and color apply dynamc on selected option-->
+            <td class="text-center">
+              <select 
+                id="inputStatus"
+                class="form-select text-center small-dropdown"
+                (change)="selectOption($event, task.id)"
+                [style.background-color]="
+                  task.taskStatus === 'Completed' ? 'green' : task.taskStatus === 'Pending' ? 'red':'rgb(229 222 38)'
+                "
+              >
+              <!-- default option selected -->
+                <option class="text-center" selected>{{ task.taskStatus }}</option>
+                <!-- dynamic dropdown values shows here -->
+                <ng-container  *ngFor="let option of dropdownOptions">
+                  <!-- option value bind using value [value]="option" -->
+                  <option [style.background-color]="
+                  option === 'Completed' ? 'green' : option === 'Pending' ? 'red':'rgb(229 222 38)'
+                "[value]="option" *ngIf="task.taskStatus != option">
+                    {{ option }}
+                  </option>
+                </ng-container>
+              </select>
+              <!-- end selection option here -->
+        
+            </td>
+            <td class="text-center">{{ task.date | date : "short" }}</td>
+            <td class="text-center">
+              <!-- open modal here for on button click and disable on completed -->
+              <button  [disabled]="task.taskStatus == 'Completed'"
+                class="btn btn-success mr"
+                (click)="openModal('editModal')"
+                (click)="GetToDoDataById(task.id)"
+              >
+                <i class="fa fa-edit"> </i>Edit
+              </button>
+            <!-- open delete model  -->
+              <button
+                class="btn btn-danger"
+                (click)="openDeleteModal('deleteModal', task.id)"
+              >
+                <i class="fa fa-trash"> </i> Del
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+        <!-- //pagination -->
+        <div class="text-center">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+
+    <!-- Add task button-->
+    <div class="container">
+      <div class="row mt-2">
+        <div class="col">
+          <!-- open add task Model on button click -->
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="openModal('AddModal')"
+          >
+            Add Task
+          </button>
+        </div>
+      </div>
+    </div>
+
+<!-- Empty Messsage -->
+    <div *ngIf="toDoList.length == 0">
+      <h1>Empty</h1>
+    </div>
+    <hr />
+    <!-- All Task completed message -->
+    <div *ngIf="checkboxValue">
+      <h1>Yey! All task has been completed 👻</h1>
+    </div>
+    <div class="divLine">
+      <!-- All Pending task message -->
+      <div class="line bac" style="background-color: red;"><h1 *ngIf="!checkboxValue">All Pending Task {{toDoList.length -PendingTask - InProgressTask}}</h1></div>
+      <!-- All In-Progress Message -->
+     <div class="line" style="background-color: yellow;"> <h1 *ngIf="!checkboxValue">All In-Progress Task {{InProgressTask}}</h1></div>
+    </div>
+ 
+   
+  </div>
+</div>
+
+
+<!----------------------------- Modal for Add task ---------------------------------->
+<!-- Id is compulsary  -->
+<div
+  class="modal"
+  id="AddModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title">Add Task</h1>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeModal('AddModal')"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- form here -->
+        <form [formGroup]="AddTaskForm">
+          <div class="col-md-12">
+            <label for="Id" class="form-label">ID</label>
+            <input #numericInput  (keypress)="onKeyPress($event)"
+              type="text"
+              class="form-control allow-numeric-id"
+              id="Id"
+              formControlName="Id"  [ngClass]="{'is-invalid': (AddTaskForm.get('Id')?.dirty ||  AddTaskForm.get('Id')?.touched) && AddTaskForm.get('Id')?.errors}">
+              <span class="error-id" style="color: red; display: none">* only number (0 - 9)</span>
+              <!-- <div
+              *ngIf="(AddTaskForm?.get('Id')?.dirty || AddTaskForm.get('Id')?.touched) && AddTaskForm?.get('Id')?.errors"
+              class="invalid-feedback">
+              <div *ngIf="AddTaskForm?.get('Id')?.errors?.['required']">Id is required</div>
+             
+
+
+            </div> -->
+            
+          </div>
+          <div class="col-md-12">
+            <label for="TaskName" class="form-label">Task Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="TaskName"
+              formControlName="TaskName" [ngClass]="{'is-invalid': (AddTaskForm.get('TaskName')?.dirty ||  AddTaskForm.get('TaskName')?.touched) && AddTaskForm.get('TaskName')?.errors}">
+           <div
+              *ngIf="(AddTaskForm?.get('TaskName')?.dirty || AddTaskForm.get('TaskName')?.touched) && AddTaskForm?.get('TaskName')?.errors"
+              class="invalid-feedback">
+              <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['required']">TaskName is required</div>
+               <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['pattern']">TaskName must be a Character</div>
+             
+
+
+            </div>
+            
+          </div>
+          <div class="col-md-12">
+            <label for="inputStatus" class="form-label">Status</label>
+            <select
+              id="inputStatus"
+              class="form-select"
+              (change)="selectOption($event, Id)"
+            >
+              <option selected>Choose...</option>
+              <option *ngFor="let option of dropdownOptions" [value]="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-12">
+            <label for="inputDeadLine" class="form-label">DeadLine</label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              id="inputDate"
+              placeholder="date"
+              formControlName="Date"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <!-- close model on button click -->
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeModal('AddModal')"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <!-- getting data from modal  -->
+        <button
+          type="submit"
+          class="btn btn-primary"
+          (click)="addToDoTask(AddTaskForm.value)"
+          [disabled]="!AddTaskForm.valid"
+        >
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Edit task -->
+<div
+  class="modal"
+  id="editModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title">Edit Task</h1>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeModal('editModal')"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="AddTaskForm">
+          <div class="form-group">
+            <label for="id">Id</label>
+            <input 
+              type="text"
+              class="form-control"
+              id="Id"
+              formControlName="Id"  readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="taskName">Task Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="TaskName"
+              formControlName="TaskName" [ngClass]="{'is-invalid': (AddTaskForm.get('TaskName')?.dirty ||  AddTaskForm.get('TaskName')?.touched) && AddTaskForm.get('TaskName')?.errors}"/>
+              <div
+              *ngIf="(AddTaskForm?.get('TaskName')?.dirty || AddTaskForm.get('TaskName')?.touched) && AddTaskForm?.get('TaskName')?.errors"
+              class="invalid-feedback">
+              <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['required']">TaskName is required</div>
+               <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['pattern']">TaskName must be a Character</div>
+             
+
+
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputStatus">Status</label>
+            <select
+              id="inputStatus"
+              class="form-select"
+              (change)="selectOption($event, Id)"
+            >
+              <option selected>{{ TaskStatus }}</option>
+              <ng-container *ngFor="let option of dropdownOptions">
+                <option [value]="option" *ngIf="TaskStatus != option">
+                  {{ option }}
+                </option>
+              </ng-container>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inputDeadLine">DeadLine Date</label>
+            <input
+            type="datetime-local"
+              name="date"
+              class="form-control"
+              id="inputDeadLine"
+              formControlName="Date"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeModal('editModal')"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="updateToDoTask(AddTaskForm)" [disabled]="!AddTaskForm.valid"
+        >
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Delete task -->
+<div
+  class="modal"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title">Delete Task</h1>
+      </div>
+      <div class="modal-body">
+        <h3>Are sure to delete</h3>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeModal('editModal')"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="deleteToDoTask(deletedId)"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

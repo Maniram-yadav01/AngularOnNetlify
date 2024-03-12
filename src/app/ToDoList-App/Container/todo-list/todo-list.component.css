@@ -1,0 +1,80 @@
+
+
+  .main{
+    width: 100%;
+    /* background-color:	#b19ca433; */
+}
+
+.completed{
+    text-decoration-line: line-through;
+}
+
+h1{
+    font-family: 'Patrick Hand', cursive;
+}
+
+.main{
+    max-width: 50%;
+    /* box-shadow: 8px 6px#858181; */
+    /* border-radius: 20px; */
+    padding: 0;
+    min-height: 350px;
+    min-width: 400px;
+}
+
+.header{
+    display: flex;
+    justify-content: center;
+}
+
+
+.main-container{
+    margin: 2%;
+}
+
+.main{
+    margin-top: 5em;
+}
+
+
+
+
+.selectall{
+    margin-top: -30px;
+}
+
+.dateClass{
+    font-size: 1em;
+    float: right;
+    margin-right: 20px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    padding: 0 10px;
+    border-radius: 20px;
+    /* visibility: hidden; */
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #36221a; /* or any other color */
+  }
+  
+  
+.mr{
+    margin-right: 5px;
+}
+
+.small-dropdown {
+    width: 133px;
+    height: 38px;
+    font-size: 16px
+}
+
+.divLine {
+    display: flex;
+}
+
+.line {
+    flex: 1;
+    white-space: nowrap; /* Prevent line breaks */
+}
