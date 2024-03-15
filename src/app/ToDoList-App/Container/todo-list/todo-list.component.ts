@@ -21,6 +21,8 @@ export class TodoListComponent implements OnInit {
   selectedDate: string = '';
   TaskName:any;
   Date:any;
+  Time:any;
+  DateTime:any
   TaskStatus:any;
   Id:any;
   deletedId:any;
@@ -36,6 +38,13 @@ PendingTask:any= 0;
 InProgressTask:any= 0;
 isInputDisabled: boolean = true;
 BoolForAddData:boolean = false;
+dataforAdd = {
+  TaskName:'',
+  TaskStatus:'',
+  Id:'',
+  Date:''
+}
+dataForUpdate1:any
 // jquery 
 
 
@@ -75,9 +84,25 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     this.AddTaskForm = this.buildForm();
     this.cdr.detectChanges();
     this.remaining();  
+    this.AddTaskForm.get('Time')?.valueChanges.subscribe((time: string) => {
+      this.updateDateTime();
+    });
+
+    this.AddTaskForm.get('Date')?.valueChanges.subscribe((date: string) => {
+      this.updateDateTime();
+    });
 
   }
- 
+  updateDateTime() {
+    const time = this.AddTaskForm.get('Time')?.value;
+    const date = this.AddTaskForm.get('Date')?.value;
+    // Combine time and date into a single datetime string
+    const dateTime = date +"T" + time+":"+"37.295Z";
+    // Set the value of the DateTime field
+    this.AddTaskForm.patchValue({ DateTime: dateTime });
+  }
+
+
   GetToDoTaskData()
   {
   this.service.getToDoListData().subscribe((res: any) => {
@@ -92,8 +117,10 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     return this.formBuilder.group({
       TaskName:['',[Validators.required,Validators.pattern("^[a-zA-Z ]*$")]],
       TaskStatus: ['',[Validators.required]],
+      Time:['',[Validators.required]],
       Date:['',[Validators.required]],
-      Id:['',[Validators.required]]
+      DateTime:[''],
+      Id:['',[Validators.required]],
     })
   }
  
@@ -122,6 +149,7 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
       this.dataUpdateByOption = res;
       this.dataUpdateByOption.taskStatus = this.selectedOption;
       //update taskStatus
+      this.dataUpdateByOption.date = this.dataUpdateByOption.date+"Z"
       this.service.updateToDoListData(this.dataUpdateByOption).subscribe((res:any) => {
         console.log("up"+res.taskStatus);
       });
@@ -196,8 +224,13 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     {
 
       console.log(data);
-      data = JSON.stringify(data);
+      // data = JSON.stringify(data);
       console.log("Add function"+data);
+      this.dataforAdd.TaskName = data.TaskName;
+      this.dataforAdd.TaskStatus = data.TaskStatus;
+      this.dataforAdd.Id = data.Id;
+      this.dataforAdd.Date = data.DateTime;
+      data = JSON.stringify(this.dataforAdd);
       this.service.AddToDoListData(data).subscribe((res) => {
         console.log("Add Function"+res);
       });
@@ -211,9 +244,11 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
 
   // Update to do task 
   updateToDoTask(dataForUpdate: any) {
-    dataForUpdate = JSON.stringify(dataForUpdate.value);
+
+    dataForUpdate.value.Date = dataForUpdate.value.Date+"Z";
+     this.dataForUpdate1 = JSON.stringify(dataForUpdate.value);
     console.log("Update"+dataForUpdate);
-    this.service.updateToDoListData(dataForUpdate).subscribe((res:any) => {
+    this.service.updateToDoListData(this.dataForUpdate1).subscribe((res:any) => {
       console.log("Successfull"+res);
     });
     alert("Data  Updated successfull");
