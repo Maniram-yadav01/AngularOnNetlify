@@ -8,4 +8,7 @@ We can also deploy angular project on netlify with github
 Netlify site link: https://app.netlify.com/sites/mytodolistdata/overview
 My web app site: https://mytodolistdata.netlify.app/
 
+Consume api of Railway that we deployed on Railway
+Api: https://mytodolistdata.up.railway.app/ToDoList/GetToDoTaskData
+
 ---------------------------------------------------------------------------------------------------------------------------------------------
