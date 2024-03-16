@@ -1,128 +1,159 @@
-<div class="container main background-green">
-  <div class="text-center">
-  <span class="dateClass"
-    ><i class="fa fa-calendar"></i> Date: {{ today | date : "short" }}</span>
-  <div class="header">
-    <h1>TODO LIST <i class="fa fa-pencil"></i></h1>
-  </div>
-</div>
-  <div class="main-container">
-    <!-- Select All -->
-      <span class="dateClass">
-        <label class="checkbox-inline"
-          ><input type="checkbox" [(ngModel)]="checkboxValue" (change)="onCheckboxChange()" />
-          <span> Select All</span>
-          </label
-        >
-      </span>
-       <!-- End Select All -->
-    <div class="content">
-      <!-- Table -->
-      <table class="table">
-        <!-- Table header -->
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">Id</th>
-            <th scope="col" class="text-center">Task Name</th>
-            <th scope="col" class="text-center">Status</th>
-            <th scope="col" class="text-center">DeadLine</th>
-            <th scope="col" class="text-center">Action</th>
-          </tr>
-        </thead>
-        <!-- table data show here -->
-        <!-- Also Added pagination -->
-        <tbody *ngFor="let task of toDoList | paginate: { itemsPerPage: count, currentPage: p }">
-          <!-- text-decoration-line apply here -->
-          <tr [class.completed]="task.taskStatus == 'Completed'">
-            <td scope="row" class="text-center">{{ task.id }}</td>
-            <td class="text-center">{{ task.taskName }}</td>
-            <!-- option selection here dynamic and color apply dynamc on selected option-->
-            <td class="text-center">
-              <select 
-                id="inputStatus"
-                class="form-select text-center small-dropdown"
-                (change)="selectOption($event, task.id)"
-                [style.background-color]="
-                  task.taskStatus === 'Completed' ? 'green' : task.taskStatus === 'Pending' ? 'red':'rgb(229 222 38)'
-                "
-              >
-              <!-- default option selected -->
-                <option class="text-center" selected>{{ task.taskStatus }}</option>
-                <!-- dynamic dropdown values shows here -->
-                <ng-container  *ngFor="let option of dropdownOptions">
-                  <!-- option value bind using value [value]="option" -->
-                  <option [style.background-color]="
-                  option === 'Completed' ? 'green' : option === 'Pending' ? 'red':'rgb(229 222 38)'
-                "[value]="option" *ngIf="task.taskStatus != option">
-                    {{ option }}
-                  </option>
-                </ng-container>
-              </select>
-              <!-- end selection option here -->
-        
-            </td>
-            <td class="text-center">{{ task.date | date : "short" }}</td>
-            <td class="text-center">
-              <!-- open modal here for on button click and disable on completed -->
-              <button  [disabled]="task.taskStatus == 'Completed'"
-                class="btn btn-success mr"
-                (click)="openModal('editModal')"
-                (click)="GetToDoDataById(task.id)"
-              >
-                <i class="fa fa-edit"> </i>Edit
-              </button>
-            <!-- open delete model  -->
-              <button
-                class="btn btn-danger"
-                (click)="openDeleteModal('deleteModal', task.id)"
-              >
-                <i class="fa fa-trash"> </i> Del
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<div class="bg">
+  <div class="container main">
+    <div class="">
+      <span class="dateClass"
+        ><i class="fa fa-calendar"></i> Date: {{ today | date : "short" }}</span
+      >
+      <div class="header">
+        <h1>TODO LIST <i class="fa fa-pencil"></i></h1>
+      </div>
     </div>
-        <!-- //pagination -->
-        <div class="text-center">
-          <pagination-controls (pageChange)="p = $event"></pagination-controls>
-        </div>
-
-    <!-- Add task button-->
-    <div class="container">
-      <div class="row mt-2">
-        <div class="col">
-          <!-- open add task Model on button click -->
-          <button
-            type="button"
-            class="btn btn-success"
-            (click)="openModal('AddModal')"
+    <div class="main-container">
+      <!-- Select All -->
+      <span class="dateClass pd">
+        <label class="checkbox-inline"
+          ><input
+            type="checkbox"
+            [(ngModel)]="checkboxValue"
+            (change)="onCheckboxChange()"
+          />
+          <span> Select All</span>
+        </label>
+      </span>
+      <!-- End Select All -->
+      <div class="content">
+        <!-- Table -->
+        <table class="table">
+          <!-- Table header -->
+          <thead>
+            <tr>
+              <th scope="col" class="text-center">Id</th>
+              <th scope="col" class="text-center">Task Name</th>
+              <th scope="col" class="text-center">Status</th>
+              <th scope="col" class="text-center">DeadLine</th>
+              <th scope="col" class="text-center">Action</th>
+            </tr>
+          </thead>
+          <!-- table data show here -->
+          <!-- Also Added pagination -->
+          <tbody
+            *ngFor="
+              let task of toDoList
+                | paginate : { itemsPerPage: count, currentPage: p }
+            "
           >
-            Add Task
-          </button>
+            <!-- text-decoration-line apply here -->
+            <tr [class.completed]="task.taskStatus == 'Completed'">
+              <td scope="row" class="text-center">{{ task.id }}</td>
+              <td class="text-center">{{ task.taskName }}</td>
+              <!-- option selection here dynamic and color apply dynamc on selected option-->
+              <td class="text-center">
+                <select
+                  id="inputStatus"
+                  class="form-select text-center small-dropdown"
+                  (change)="selectOption($event, task.id)"
+                  [style.background-color]="
+                    task.taskStatus === 'Completed'
+                      ? 'green'
+                      : task.taskStatus === 'Pending'
+                      ? 'red'
+                      : 'rgb(229 222 38)'
+                  "
+                >
+                  <!-- default option selected -->
+                  <option class="text-center" selected>
+                    {{ task.taskStatus }}
+                  </option>
+                  <!-- dynamic dropdown values shows here -->
+                  <ng-container *ngFor="let option of dropdownOptions">
+                    <!-- option value bind using value [value]="option" -->
+                    <option
+                      [style.background-color]="
+                        option === 'Completed'
+                          ? 'green'
+                          : option === 'Pending'
+                          ? 'red'
+                          : 'rgb(229 222 38)'
+                      "
+                      [value]="option"
+                      *ngIf="task.taskStatus != option"
+                    >
+                      {{ option }}
+                    </option>
+                  </ng-container>
+                </select>
+                <!-- end selection option here -->
+              </td>
+              <td class="text-center">{{ task.date | date : "short" }}</td>
+              <td class="text-center">
+                <!-- open modal here for on button click and disable on completed -->
+                <button
+                  [disabled]="task.taskStatus == 'Completed'"
+                  class="btn btn-success mr"
+                  (click)="openModal('editModal')"
+                  (click)="GetToDoDataById(task.id)"
+                >
+                  <i class="fa fa-edit"> </i>Edit
+                </button>
+                <!-- open delete model  -->
+                <button
+                  class="btn btn-danger"
+                  (click)="openDeleteModal('deleteModal', task.id)"
+                >
+                  <i class="fa fa-trash"> </i> Del
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+
+      <div class="containerpg">
+        <!-- Add task button-->
+            <div class="btClass">
+              <!-- open add task Model on button click -->
+              <button
+                type="button"
+                class="btn btn-success"
+                (click)="openModal('AddModal')"
+              >
+                Add Task
+              </button>
+              </div>
+                <!-- //pagination -->
+              <div class="btClass">
+              <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </div>
+            </div>
+      
+      </div>
+
+      <!-- Empty Messsage -->
+      <div *ngIf="toDoList.length == 0">
+        <h1>Empty</h1>
+      </div>
+      <!-- All Task completed message -->
+      <div *ngIf="checkboxValue">
+        <h1>Yey! All task has been completed 👻</h1>
+      </div>
+      <div class="divLine">
+        <!-- All Pending task message -->
+        <div class="line pending">
+          <h1 *ngIf="!checkboxValue">
+            All Pending Task
+            {{ toDoList.length - PendingTask - InProgressTask }}
+          </h1>
+        </div>
+        <!-- All In-Progress Message -->
+        <div class="line inprogress">
+          <h1 *ngIf="!checkboxValue">
+            All In-Progress Task {{ InProgressTask }}
+          </h1>
         </div>
       </div>
     </div>
-
-<!-- Empty Messsage -->
-    <div *ngIf="toDoList.length == 0">
-      <h1>Empty</h1>
-    </div>
-    <hr />
-    <!-- All Task completed message -->
-    <div *ngIf="checkboxValue">
-      <h1>Yey! All task has been completed 👻</h1>
-    </div>
-    <div class="divLine">
-      <!-- All Pending task message -->
-      <div class="line bac" style="background-color: red;"><h1 *ngIf="!checkboxValue">All Pending Task {{toDoList.length -PendingTask - InProgressTask}}</h1></div>
-      <!-- All In-Progress Message -->
-     <div class="line" style="background-color: yellow;"> <h1 *ngIf="!checkboxValue">All In-Progress Task {{InProgressTask}}</h1></div>
-    </div>
- 
-   
   </div>
-</div>
 
 
 <!----------------------------- Modal for Add task ---------------------------------->
@@ -151,13 +182,24 @@
         <form [formGroup]="AddTaskForm">
           <div class="col-md-12">
             <label for="Id" class="form-label">ID</label>
-            <input #numericInput  (keypress)="onKeyPress($event)"
+            <input
+              #numericInput
+              (keypress)="onKeyPress($event)"
               type="text"
               class="form-control allow-numeric-id"
               id="Id"
-              formControlName="Id"  [ngClass]="{'is-invalid': (AddTaskForm.get('Id')?.dirty ||  AddTaskForm.get('Id')?.touched) && AddTaskForm.get('Id')?.errors}">
-              <span class="error-id" style="color: red; display: none">* only number (0 - 9)</span>
-              <!-- <div
+              formControlName="Id"
+              [ngClass]="{
+                'is-invalid':
+                  (AddTaskForm.get('Id')?.dirty ||
+                    AddTaskForm.get('Id')?.touched) &&
+                  AddTaskForm.get('Id')?.errors
+              }"
+            />
+            <span class="error-id" style="color: red; display: none"
+              >* only number (0 - 9)</span
+            >
+            <!-- <div
               *ngIf="(AddTaskForm?.get('Id')?.dirty || AddTaskForm.get('Id')?.touched) && AddTaskForm?.get('Id')?.errors"
               class="invalid-feedback">
               <div *ngIf="AddTaskForm?.get('Id')?.errors?.['required']">Id is required</div>
@@ -165,7 +207,6 @@
 
 
             </div> -->
-            
           </div>
           <div class="col-md-12">
             <label for="TaskName" class="form-label">Task Name</label>
@@ -173,17 +214,29 @@
               type="text"
               class="form-control"
               id="TaskName"
-              formControlName="TaskName" [ngClass]="{'is-invalid': (AddTaskForm.get('TaskName')?.dirty ||  AddTaskForm.get('TaskName')?.touched) && AddTaskForm.get('TaskName')?.errors}">
-           <div
-              *ngIf="(AddTaskForm?.get('TaskName')?.dirty || AddTaskForm.get('TaskName')?.touched) && AddTaskForm?.get('TaskName')?.errors"
-              class="invalid-feedback">
-              <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['required']">TaskName is required</div>
-               <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['pattern']">TaskName must be a Character</div>
-             
-
-
+              formControlName="TaskName"
+              [ngClass]="{
+                'is-invalid':
+                  (AddTaskForm.get('TaskName')?.dirty ||
+                    AddTaskForm.get('TaskName')?.touched) &&
+                  AddTaskForm.get('TaskName')?.errors
+              }"
+            />
+            <div
+              *ngIf="
+                (AddTaskForm?.get('TaskName')?.dirty ||
+                  AddTaskForm.get('TaskName')?.touched) &&
+                AddTaskForm?.get('TaskName')?.errors
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['required']">
+                TaskName is required
+              </div>
+              <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['pattern']">
+                TaskName must be a Character
+              </div>
             </div>
-            
           </div>
           <div class="col-md-12">
             <label for="inputStatus" class="form-label">Status</label>
@@ -265,11 +318,12 @@
         <form [formGroup]="AddTaskForm">
           <div class="form-group">
             <label for="id">Id</label>
-            <input 
+            <input
               type="text"
               class="form-control"
               id="Id"
-              formControlName="Id"  readonly
+              formControlName="Id"
+              readonly
             />
           </div>
           <div class="form-group">
@@ -278,15 +332,28 @@
               type="text"
               class="form-control"
               id="TaskName"
-              formControlName="TaskName" [ngClass]="{'is-invalid': (AddTaskForm.get('TaskName')?.dirty ||  AddTaskForm.get('TaskName')?.touched) && AddTaskForm.get('TaskName')?.errors}"/>
-              <div
-              *ngIf="(AddTaskForm?.get('TaskName')?.dirty || AddTaskForm.get('TaskName')?.touched) && AddTaskForm?.get('TaskName')?.errors"
-              class="invalid-feedback">
-              <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['required']">TaskName is required</div>
-               <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['pattern']">TaskName must be a Character</div>
-             
-
-
+              formControlName="TaskName"
+              [ngClass]="{
+                'is-invalid':
+                  (AddTaskForm.get('TaskName')?.dirty ||
+                    AddTaskForm.get('TaskName')?.touched) &&
+                  AddTaskForm.get('TaskName')?.errors
+              }"
+            />
+            <div
+              *ngIf="
+                (AddTaskForm?.get('TaskName')?.dirty ||
+                  AddTaskForm.get('TaskName')?.touched) &&
+                AddTaskForm?.get('TaskName')?.errors
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['required']">
+                TaskName is required
+              </div>
+              <div *ngIf="AddTaskForm?.get('TaskName')?.errors?.['pattern']">
+                TaskName must be a Character
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -307,7 +374,7 @@
           <div class="form-group">
             <label for="inputDeadLine">DeadLine Date</label>
             <input
-            type="datetime-local"
+              type="datetime-local"
               name="date"
               class="form-control"
               id="inputDeadLine"
@@ -328,7 +395,8 @@
         <button
           type="button"
           class="btn btn-primary"
-          (click)="updateToDoTask(AddTaskForm)" [disabled]="!AddTaskForm.valid"
+          (click)="updateToDoTask(AddTaskForm)"
+          [disabled]="!AddTaskForm.valid"
         >
           Save changes
         </button>

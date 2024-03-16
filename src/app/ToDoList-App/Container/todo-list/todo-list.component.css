@@ -1,10 +1,4 @@
 
-
-  .main{
-    width: 100%;
-    /* background-color:	#b19ca433; */
-}
-
 .completed{
     text-decoration-line: line-through;
 }
@@ -15,11 +9,12 @@ h1{
 
 .main{
     max-width: 50%;
-    /* box-shadow: 8px 6px#858181; */
-    /* border-radius: 20px; */
+    /* box-shadow: 8px 6px#858181; 
+     border-radius: 20px;  */
     padding: 0;
-    min-height: 350px;
-    min-width: 400px;
+    margin-top: 5em;
+    /* min-height: 350px;
+    min-width: 400px; */
 }
 
 .header{
@@ -30,14 +25,8 @@ h1{
 
 .main-container{
     margin: 2%;
+    margin-top: -20px;
 }
-
-.main{
-    margin-top: 5em;
-}
-
-
-
 
 .selectall{
     margin-top: -30px;
@@ -47,16 +36,19 @@ h1{
     font-size: 1em;
     float: right;
     margin-right: 20px;
-    color: rgb(0, 0, 0);
-    background-color: rgb(255, 255, 255);
+    color: rgb(16, 2, 65);
+    background-color: rgb(161, 121, 203);
     padding: 0 10px;
     border-radius: 20px;
     /* visibility: hidden; */
 }
+.pd{
+    margin-bottom: 5px;
+}
 
 .completed {
     text-decoration: line-through;
-    color: #36221a; /* or any other color */
+    color: #1a1614; /* or any other color */
   }
   
   
@@ -72,9 +64,60 @@ h1{
 
 .divLine {
     display: flex;
+    margin-top: -14px;
 }
 
 .line {
     flex: 1;
     white-space: nowrap; /* Prevent line breaks */
 }
+
+.mb{
+    margin-bottom: -34px;
+}
+
+.bg{
+    background-color: #0a1a0659; /* Replace with your desired background color */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* z-index: -1;  */
+}
+
+.containerpg{
+    display: flex;
+}
+
+.btClass{
+    flex: 1;
+    border: 1px;
+}
+.pending{
+    border-radius: 20px;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-right: 2px;
+}
+
+.inprogress{
+    border-radius: 20px;
+    background-color: yellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0px;
+}
+
+@media (max-width: 426px) {
+    .main {
+        width: 300%; /* Adjust width to 100% for responsiveness */
+        
+    }
+}
+
