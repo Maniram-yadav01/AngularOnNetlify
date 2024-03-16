@@ -1,3 +1,324 @@
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------  Angular -------------------------------------------------------------------------------------------------
+Angular version 14
+
+Step1:
+    ng new --name NgToDoListProject2024
+Step2:
+   ng serve   or ng serve --watch  // for run Angular project
+Step3:
+   ng g s ToDoList   for service ,create a service under a src/Service folder
+   ng g class ToDoClass    // for model
+
+Step4:
+    ng g c ToDoListComponent   // component under src folder
+
+Step5: 
+    Add ToListComponent selecter in app component
+	    src\app\app.component.html
+	       <app-to-do-list-component></app-to-do-list-component>
+		   
+Step6: 
+   Declare all component and module like ToDolistComponent in app.module.ts
+		   @NgModule({
+		   // for component
+			  declarations: [  
+				AppComponent,
+				TodoEmptyComponent,
+				TodoListComponent,
+			   
+			  ],
+			  // for module
+			  imports: [  
+				BrowserModule,
+				AppRoutingModule,
+				HttpClientModule,
+				BrowserAnimationsModule,
+				FormsModule,
+				ReactiveFormsModule,
+				MatButtonModule,
+				MatPaginatorModule,
+				NgxPaginationModule
+			  ],
+			  providers: [
+				
+			  ],
+			  bootstrap: [AppComponent]
+			})
+Step7: 
+  connect Angular with api in service file
+    src\Service\to-do-list.service.ts
+		   import { HttpClient, HttpHeaders } from '@angular/common/http';
+			import { Injectable } from '@angular/core';
+
+
+			@Injectable({
+			  providedIn: 'root'
+			})
+			export class ToDoListService {
+
+			  constructor(private http: HttpClient) { }
+			  headers={
+				headers: new HttpHeaders({
+					'Content-Type': 'application/json'
+				})
+			}
+			  getToDoListData() {
+				return this.http.get('https://localhost:5001/ToDoList/GetToDoTaskData');
+			  }
+			  updateToDoListData(data:object) {
+
+				let url = 'https://localhost:5001/ToDoList/UpdateToDoTaskById';
+				return this.http.post(url,data,this.headers);
+			  }
+			  deleteToDoListData(id:any) {
+				return this.http.delete(`https://localhost:5001/ToDoList/DeleteToDoTaskData?Id=${id}`);
+			  }
+			  AddToDoListData(data:object) {
+				let url = 'https://localhost:5001/ToDoList/CreateToDoTask';
+				return this.http.post(url,data,this.headers);
+			  }
+			  getToDoListDataByID(id:any) {
+				return this.http.get(`https://localhost:5001/ToDoList/GetToDoTaskById?Id=${id}`);
+			  }
+			  UpdateTaskStatusById(Id:any,TaskStatus:any)
+			  {
+				let url = `https://localhost:5001/ToDoList/UpdateTaskStatusById?Id=${Id}&TaskStatus=${TaskStatus}`;
+				return this.http.put(url,null);
+			  }
+			}
+
+Step8:
+     create a interface under service foolder 
+			export interface ToDoClass {
+			taskName:any;
+			taskStatus:any
+			id:any;
+			date:any;
+		}
+
+	 
+Step9:
+    call api function in ToDoListComponent
+			src\to-do-list-component\to-do-list-component.component.ts
+			
+			 toDoList: ToDoClass[] = [];
+			  AddTaskForm!:FormGroup;
+			  today: number = Date.now();
+			  formModal: any; // define a variable
+			  TaskName:any;
+			  Date:any;
+			  Id:any;
+			  deletedId:any;
+			  dataUpdateByOption:any;
+
+         constructor(private service: ToDoListService,private formBuilder: FormBuilder) {}
+			
+			 ngOnInit(): void {
+			this.service.getToDoListData().subscribe((res: any) => {
+			  this.toDoList = res;
+			  console.log(this.toDoList);
+			});
+			this.AddTaskForm = this.buildForm(); 
+		  }
+		  
+		   private buildForm()
+			  {
+				return this.formBuilder.group({
+				  TaskName:[''],
+				  TaskStatus: [''],
+				  Date:[''],
+				  // time:[''],
+				  Id:[''],
+				  DeadLine:['']
+				})
+			  }
+			  
+			  // delete to do Task
+			  deleteToDoTask(Id: any) {
+				this.service.deleteToDoListData(Id).subscribe(() => {
+				  console.log('Succcess');
+				});
+				alert("Data Deleted");
+				window.location.reload();
+			  }
+			// Add to Do Task
+			  addToDoTask(data: any) {
+				console.log(data);
+				data = JSON.stringify(data);
+				console.log("Add function"+data);
+				this.service.AddToDoListData(data).subscribe((res) => {
+				  console.log("Add Function"+res);
+				});
+				alert("Data Successfull saved");
+				window.location.reload();
+			  }
+
+			  // Update to do task 
+			  updateToDoTask(dataForUpdate: any) {
+				dataForUpdate = JSON.stringify(dataForUpdate.value);
+				console.log("Update"+dataForUpdate);
+				this.service.updateToDoListData(dataForUpdate).subscribe((res:any) => {
+				  console.log("Successfull"+res);
+				});
+				alert("Data  Updated successfull");
+				window.location.reload();
+			  }
+
+			  //Get To Do Task by id
+			  GetToDoDataById(Id:any)
+			  {
+				 this.service.getToDoListDataByID(Id).subscribe((res:any) =>{
+				  this.TaskName = res.taskName;
+				  this.TaskStatus = res.taskStatus;
+				  this.Date = res.date;
+				  this.Id = res.id;
+				  console.log(res);
+				 
+				  this.AddTaskForm =  this.formBuilder.group({
+					TaskName:[this.TaskName],
+					TaskStatus:[this.TaskStatus],
+					Date:[this.Date],
+					Id:[this.Id]
+				  })
+				})
+			  }
+			 
+			  UpdateTaskStatusbyID(Id:any,TaskStatus:any)
+			  {
+				this.service.UpdateTaskStatusById(Id,TaskStatus).subscribe((res:any)=>
+				{
+				  console.log(res);
+				});
+			  }
+	
+	
+Step9: 
+     show in html file
+			 <div class="container main">
+		  <span class="dateClass"
+			><i class="fa fa-calendar"></i> Date: {{ today | date : "short" }}</span
+		  >
+		  <div class="header">
+			<h1>TODO LIST <i class="fa fa-pencil"></i></h1>
+		  </div>
+		  <div class="main-container">
+			<div class="content">
+			  <table class="table">
+				<thead>
+				  <tr>
+					<th scope="col">Id</th>
+					<th scope="col">Task Name</th>
+					<th scope="col">Status</th>
+					<th scope="col">DeadLine</th>
+					<th scope="col">Action</th>
+				  </tr>
+				</thead>
+				<tbody *ngFor="let task of toDoList">
+				  <tr >
+					<th scope="row">{{ task.id }}</th>
+					<td >{{ task.taskName }}</td>
+					<td >
+					</td>
+					<td >{{ task.date | date : "short" }}</td>
+					<td>
+					  <!-- open modal here for on button click -->
+					  <button 
+						class="btn btn-success listBtn"
+						(click)="GetToDoDataById(task.id)"
+					  >
+						<i class="fa fa-edit"> </i>Edit
+					  </button>
+					  <button
+						class="btn btn-danger listBtn"
+					  >
+						<i class="fa fa-trash"> </i> Del
+					  </button>
+					</td>
+				  </tr>
+				</tbody>
+			  </table>
+			</div>
+				
+
+			
+
+			<div *ngIf="toDoList.length == 0">
+			  <h1>Empty</h1>
+			</div>
+			<hr />
+		  </div>
+		</div>
+
+
+Step10: 
+   Add css
+   
+
+		  .main{
+			width: 100%;
+			/* background-color:	#b19ca433; */
+		}
+
+		.completed{
+			text-decoration-line: line-through;
+		}
+
+		h1{
+			font-family: 'Patrick Hand', cursive;
+		}
+
+		.main{
+			max-width: 50%;
+			/* box-shadow: 8px 6px#858181; */
+			/* border-radius: 20px; */
+			padding: 0;
+			min-height: 350px;
+			min-width: 400px;
+		}
+
+		.header{
+			display: flex;
+			justify-content: center;
+		}
+
+
+		.main-container{
+			margin: 2%;
+		}
+
+		.main{
+			margin-top: 5em;
+		}
+
+
+
+
+.selectall{
+    margin-top: -30px;
+}
+
+.dateClass{
+    font-size: 1em;
+    float: right;
+    margin-right: 20px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    padding: 0 10px;
+    border-radius: 20px;
+    /* visibility: hidden; */
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #36221a; /* or any other color */
+  }
+  
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
 Deploy Angular project on Netlify
 
 
