@@ -110,13 +110,15 @@ h1{
     margin: 5px;
 }
 
+.table{
+    background-color: white;
+}
 @media only screen and (max-width: 768px) {
     table{
         width: auto;
         border-collapse: collapse;
     }
-    th,
-  td {
+    th, td {
     padding: 8px; /* Add padding for better spacing */
     text-align: left; /* Align text to the left */
   }
@@ -130,7 +132,7 @@ h1{
 
   /* Hover effect */
   tr:hover {
-    background-color: #ddd; /* Change background color on hover */
+    background-color: #d86363; /* Change background color on hover */
   }
     .bg {
         /* width: 445px; */
