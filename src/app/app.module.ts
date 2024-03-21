@@ -9,7 +9,8 @@ import { TodoListComponent } from './ToDoList-App/Container/todo-list/todo-list.
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { NgxPaginationModule } from 'ngx-pagination'; // At the top of your module
+import { NgxPaginationModule } from 'ngx-pagination';
+import { HomeComponent } from './ToDoList-App/home/home.component'; // At the top of your module
 
 
 
@@ -19,6 +20,7 @@ import { NgxPaginationModule } from 'ngx-pagination'; // At the top of your modu
     AppComponent,
     TodoEmptyComponent,
     TodoListComponent,
+    HomeComponent,
    
   ],
   //  for module

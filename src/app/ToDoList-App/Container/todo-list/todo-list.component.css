@@ -10,14 +10,14 @@ h1{
 .main {
     max-width: 62%; /* Adjust maximum width to fit mobile screens */
 }
-.bg {
+/* .bg {
     background-color: #0a1a0659;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: auto; /* Adjust height to auto for responsiveness */
-}
+/* } */
 
 /* .header{
     display: flex;
@@ -134,11 +134,11 @@ h1{
   tr:hover {
     background-color: #d86363; /* Change background color on hover */
   }
-    .bg {
+    /* .bg { */
         /* width: 445px; */
-        height: auto; /* Adjust height to auto for responsiveness */
-        background-color: aqua;
-    }
+        /* height: auto; /* Adjust height to auto for responsiveness */
+        /* background-color: aqua;
+    } */ 
     .main {
       /* Adjust maximum width to fit mobile screens */
       max-width: 100%;
@@ -162,11 +162,11 @@ h1{
     margin-top: 32px;
 }
 
-@media only screen and (max-width: 500px){
+/* @media only screen and (max-width: 500px){
     .bg{
         max-width: 500px;
         background-color: coral;
         width: auto;
     }
 
-}
+} */

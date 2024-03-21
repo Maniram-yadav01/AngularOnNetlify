@@ -1,4 +1,4 @@
-<div class="bg mobile-element">
+<div class="mobile-element">
   <div class="container main">
       <span class="dateClass"
         ><i class="fa fa-calendar"></i> Date: {{ today | date : "short" }}</span
@@ -245,7 +245,7 @@
             </select>
           </div>
           <div class="col-md-12">
-            <label for="inputDeadLine" class="form-label">DeadLine</label>
+            <label for="inputDeadLine" class="form-label">Date</label>
             <input
               type="date"
               class="form-control"
@@ -253,6 +253,7 @@
               placeholder="date"
               formControlName="Date"
             />
+            <label for="inputDeadLine" class="form-label">Time</label>
             <input
               type="time"
               class="form-control"
