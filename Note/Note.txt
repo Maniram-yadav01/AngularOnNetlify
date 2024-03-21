@@ -1,4 +1,28 @@
 ----------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------- ToDoList Project 2024 ----------------------------------------------------------------------------
+Total Hours:
+   04/03/2024    5:15 Hours
+   05/03/2024    4:40 Hours
+   06/03/2024    7:00 Hours
+   07/03/2024    8:00 Hours
+   08/03/2024    9:30 Hours
+   09/03/2024   7:00 Hours
+   ---------------------------
+   Total Hours : 41:25 Hours
+   -----------------------------
+Note: Creating ToDolist Project using asp.net core web api version 5 with Angular 14
+
+Requirement
+    dotnet version --5
+	using visual studio 2022
+	PgAdmin
+	EF core 
+	Code Fist approach
+	Angular 18 
+	Host on live Server 
+	  For UI(Anular) Netlify
+	  for Api(Asp.net core web api version 5) Railway
+
 
 ---------------------------------  Angular -------------------------------------------------------------------------------------------------
 Angular version 14
@@ -333,3 +357,8 @@ Consume api of Railway that we deployed on Railway
 Api: https://mytodolistdata.up.railway.app/ToDoList/GetToDoTaskData
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+for API(asp.net core web api) github Link: https://github.com/Maniram-yadav01/Railway
+
+----------------------------------------------------------------------------------------------------------------------------------------------
