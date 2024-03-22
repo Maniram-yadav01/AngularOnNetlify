@@ -35,7 +35,7 @@
           <!-- Also Added pagination -->
           <tbody
             *ngFor="
-              let task of toDoList
+              let task of filterItems()
                 | paginate : { itemsPerPage: count, currentPage: p }
             "
           >

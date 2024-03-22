@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ToDoListService } from '../../Service/to-do-list.service';
 import { ToDoClass } from '../../Service/to-do-class';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import * as $ from 'jquery';
   styleUrls: ['./todo-list.component.css'],
 })
 export class TodoListComponent implements OnInit {
+  @Input() toDoSearch?: string = '';
   @ViewChild('numericInput') numericInput!: ElementRef;
   toDoList: ToDoClass[] = [];
   AddTaskForm!:FormGroup;
@@ -45,7 +46,8 @@ dataforAdd = {
   Date:''
 }
 dataForUpdate1:any
-// jquery 
+searchText: string = '';
+// this.toDoList: any[] = []; // Your array of items to be filtered
 
 
 constructor(private service: ToDoListService,private formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {}
@@ -107,7 +109,6 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
   {
   this.service.getToDoListData().subscribe((res: any) => {
     this.toDoList = res;
-    console.log(this.toDoList);
     this.SelectStatus();
   });
 }
@@ -151,7 +152,6 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
       //update taskStatus
       this.dataUpdateByOption.date = this.dataUpdateByOption.date+"Z"
       this.service.updateToDoListData(this.dataUpdateByOption).subscribe((res:any) => {
-        console.log("up"+res.taskStatus);
       });
      
      });
@@ -200,7 +200,6 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
 // delete to do Task
   deleteToDoTask(Id: any) {
     this.service.deleteToDoListData(Id).subscribe(() => {
-      console.log('Succcess');
     });
     alert("Data Deleted");
     window.location.reload();
@@ -222,17 +221,12 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     }
     if(!this.BoolForAddData)
     {
-
-      console.log(data);
-      // data = JSON.stringify(data);
-      console.log("Add function"+data);
       this.dataforAdd.TaskName = data.TaskName;
       this.dataforAdd.TaskStatus = data.TaskStatus;
       this.dataforAdd.Id = data.Id;
       this.dataforAdd.Date = data.DateTime;
       data = JSON.stringify(this.dataforAdd);
       this.service.AddToDoListData(data).subscribe((res) => {
-        console.log("Add Function"+res);
       });
       alert("Data Successfull saved");
       window.location.reload();
@@ -247,9 +241,7 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
 
     dataForUpdate.value.Date = dataForUpdate.value.Date+"Z";
      this.dataForUpdate1 = JSON.stringify(dataForUpdate.value);
-    console.log("Update"+dataForUpdate);
     this.service.updateToDoListData(this.dataForUpdate1).subscribe((res:any) => {
-      console.log("Successfull"+res);
     });
     alert("Data  Updated successfull");
     window.location.reload();
@@ -263,7 +255,6 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
       this.TaskStatus = res.taskStatus;
       this.Date = res.date;
       this.Id = res.id;
-      console.log(res);
      
       this.AddTaskForm =  this.formBuilder.group({
         TaskName:[this.TaskName,[Validators.required,Validators.pattern("^[a-zA-Z ]*$")]],
@@ -278,7 +269,6 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
   {
     this.service.UpdateTaskStatusById(Id,TaskStatus).subscribe((res:any)=>
     {
-      console.log(res);
     });
   }
   remaining(): any {
@@ -287,12 +277,10 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
 
   // updating all TaskStatus on select all checkbox 
   onCheckboxChange() {
-    console.log('Checkbox value:', this.checkboxValue);
     if(this.checkboxValue)
     {
       for(let val of this.toDoList)
       {
-        console.log(val);
         val.taskStatus='Completed'
         this.UpdateTaskStatusbyID(val.id,val.taskStatus)
       }
@@ -301,7 +289,6 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     {
       for(let val of this.toDoList)
       {
-        console.log(val);
         val.taskStatus='Pending'
         this.UpdateTaskStatusbyID(val.id,val.taskStatus)
       }
@@ -329,6 +316,12 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
   hideErrorMessage() {
     const errorIdElement = this.numericInput.nativeElement.nextElementSibling;
     errorIdElement.style.display = 'none';
+  }
+
+  filterItems() {
+    // Implemented search filtering logic here
+    //  filter based on taskName containing searchText
+    return this.toDoList.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase()));
   }
 }
   
