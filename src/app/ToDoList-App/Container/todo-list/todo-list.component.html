@@ -1,24 +1,25 @@
 <div class="mobile-element">
   <div class="container main">
-      <span class="dateClass"
-        ><i class="fa fa-calendar"></i> Date: {{ today | date : "short" }}</span
-      >
-      <div class="header">
-        <h1>TODO LIST <i class="fa fa-pencil"></i></h1>
-      </div>
+    <span class="dateClass"
+      ><i class="fa fa-calendar"></i> Date: {{ today | date : "short" }}</span
+    >
+    <div class="header">
+      <h1>TODO LIST <i class="fa fa-pencil"></i></h1>
+    </div>
     <div class="main-container">
-      <!-- Select All -->
-      <span class="dateClass pd">
-        <label class="checkbox-inline"
-          ><input
-            type="checkbox"
-            [(ngModel)]="checkboxValue"
-            (change)="onCheckboxChange()"
-          />
-          <span> Select All</span>
-        </label>
-      </span>
-      <!-- End Select All -->
+      <div *ngIf="toDoList.length != 0">
+        <!-- Select All -->
+        <span class="dateClass pd">
+          <label class="checkbox-inline"
+            ><input
+              type="checkbox"
+              [(ngModel)]="checkboxValue"
+              (change)="onCheckboxChange()"
+            />
+            <span> Select All</span>
+          </label>
+        </span>
+        <!-- End Select All -->
         <!-- Table -->
         <table class="table">
           <!-- Table header -->
@@ -26,7 +27,28 @@
             <tr>
               <th scope="col" class="text-center">Id</th>
               <th scope="col" class="text-center">Task Name</th>
-              <th scope="col" class="text-center">Status</th>
+              <th scope="col" class="text-center">
+                <select id="inputStatus" (change)="selectOptionStatus($event)">
+                  <!-- default option selected -->
+                  <option class="text-center" selected hidden>Status</option>
+                  <!-- dynamic dropdown values shows here -->
+                  <ng-container *ngFor="let option of dropdownOptions">
+                    <!-- option value bind using value [value]="option" -->
+                    <option
+                      [style.background-color]="
+                        option === 'Completed'
+                          ? 'green'
+                          : option === 'Pending'
+                          ? 'red'
+                          : 'rgb(229 222 38)'
+                      "
+                      [value]="option"
+                    >
+                      {{ option }}
+                    </option>
+                  </ng-container>
+                </select>
+              </th>
               <th scope="col" class="text-center">DeadLine</th>
               <th scope="col" class="text-center">Action</th>
             </tr>
@@ -103,7 +125,9 @@
               </td>
             </tr>
           </tbody>
+          <div *ngIf="filterItems().length == 0">No Record Found</div>
         </table>
+      </div>
       <div class="containerpg">
         <!-- Add task button-->
         <div class="btClass">
@@ -117,7 +141,7 @@
           </button>
         </div>
         <!-- //pagination -->
-        <div class="btClass">
+        <div class="btClass" *ngIf="filterItems().length != 0">
           <pagination-controls (pageChange)="p = $event"></pagination-controls>
         </div>
       </div>
@@ -125,22 +149,25 @@
 
     <!-- Empty Messsage -->
     <div *ngIf="toDoList.length == 0">
-      <h1>Empty</h1>
+      <h1>No Data found!</h1>
     </div>
     <!-- All Task completed message -->
     <div *ngIf="checkboxValue">
       <h1>Yey! All task has been completed 👻</h1>
     </div>
-    <div class="divLine">
+    <div class="divLine" *ngIf="filterItems().length != 0">
       <!-- All Pending task message -->
-      <div class="line pending">
+      <div
+        class="line pending"
+        *ngIf="toDoList.length - PendingTask - InProgressTask != 0"
+      >
         <h1 *ngIf="!checkboxValue">
           All Pending Task
           {{ toDoList.length - PendingTask - InProgressTask }}
         </h1>
       </div>
       <!-- All In-Progress Message -->
-      <div class="line inprogress">
+      <div class="line inprogress" *ngIf="InProgressTask != 0">
         <h1 *ngIf="!checkboxValue">
           All In-Progress Task {{ InProgressTask }}
         </h1>

@@ -14,6 +14,7 @@ export class TodoListComponent implements OnInit {
   @Input() toDoSearch?: string = '';
   @ViewChild('numericInput') numericInput!: ElementRef;
   toDoList: ToDoClass[] = [];
+  filterItemsdata: ToDoClass[] = [];
   AddTaskForm!:FormGroup;
   today: number = Date.now();
   formModal: any; // define a variable
@@ -47,7 +48,8 @@ dataforAdd = {
 }
 dataForUpdate1:any
 searchText: string = '';
-// this.toDoList: any[] = []; // Your array of items to be filtered
+isDropdownOpen = false;
+filterStatus:string = '';
 
 
 constructor(private service: ToDoListService,private formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {}
@@ -80,8 +82,8 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     window.location.reload();
   }
 
-  ngOnInit(): void {
-    this.GetToDoTaskData();
+  async ngOnInit() {
+     this.GetToDoTaskData();
     //Form Related
     this.AddTaskForm = this.buildForm();
     this.cdr.detectChanges();
@@ -159,6 +161,13 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     }
   
   }
+
+  selectOptionStatus(event:any)
+  {
+    console.log("oo"+event.target.value);
+    this.filterStatus = event.target.value;
+  }
+
 
   // Select Status
   SelectStatus()
@@ -321,7 +330,22 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
   filterItems() {
     // Implemented search filtering logic here
     //  filter based on taskName containing searchText
-    return this.toDoList.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase()));
+    if ( this.filterStatus === 'Completed') {
+      return  this.toDoList.filter(item => item.taskStatus.toLowerCase().includes(this.filterStatus?.toLowerCase()));
+      // Reset filter
+    } 
+    if ( this.filterStatus === 'Pending') {
+      return  this.toDoList.filter(item => item.taskStatus.toLowerCase().includes(this.filterStatus?.toLowerCase()));
+      // Reset filter
+    } 
+    if ( this.filterStatus === 'In-Progress') {
+      return  this.toDoList.filter(item => item.taskStatus.toLowerCase().includes(this.filterStatus?.toLowerCase()));
+      // Reset filter
+    } 
+    
+      // this.filteredTasks = this.tasks.filter(task => task.status === status);
+      return this.toDoList.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase()));
+    
   }
 }
   
