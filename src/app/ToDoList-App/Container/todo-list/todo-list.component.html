@@ -1,22 +1,34 @@
-<div class="mobile-element">
-  <div class="container main">
-    <span class="dateClass"
-      ><i class="fa fa-calendar"></i> Date: {{ today | date : "short" }}</span
+<div class="datecls">
+  <div class="dateline" *ngIf="getSelectedRowCount() != 0">
+    <span>
+        <i class="fa fa-trash"  (click)="openDeleteModalbyId('deleteModalIdbyId')"> Delete</i> 
+        <p class="btn btnclass bdrRadius" (click)="selectAll($event)">
+          <i class="fas fa-times" style="margin-right: 5px" (click)="selectAll($event)"></i
+          >{{ getSelectedRowCount() }} Selected
+        </p>
+    </span>
+  </div>
+  <div class="dateClass dateline">
+    <span
+      ><i class="fa fa-calendar"></i> Date:
+      {{ today | date : "shortDate" }}</span
     >
+  </div>
+</div>
+
+  <div class="container main">
     <div class="header">
-      <div *ngIf="getSelectedRowCount() != 0">
-        <span>
-          <button type="button" class="btn btn-danger btnclass" (click)="openDeleteModalbyId('deleteModalIdbyId')"><i class="fa fa-trash"> </i> Delete</button>
-          <button type="button" class="btn btnclass"><p (click)="selectAll($event)"> <i class="fas fa-times" style="margin-right: 5px;"></i>{{ getSelectedRowCount()}}  Selected</p></button>
-          
-        </span>
-      </div>
       <h1>TODO LIST <i class="fa fa-pencil"></i></h1>
     </div>
     <div class="main-container">
-      <div *ngIf="toDoList.length != 0" data-toggle="tooltip" data-placement="top" title="Toggle select all">
+      <div
+        *ngIf="toDoList.length != 0"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Toggle select all"
+      >
         <!-- Select All -->
-        <span *ngIf="!checkboxValue" class="dateClass pd">
+        <!-- <span *ngIf="!checkboxValue" class="dateClass pd">
           <label class="checkbox-inline"
             ><input
               type="checkbox"
@@ -26,7 +38,13 @@
             <span> Mark All completed</span>
           </label>
         </span>
-        <span  *ngIf="checkboxValue" class="dateClass pd" data-toggle="tooltip" data-placement="top" title="Toggle remove filter">
+        <span
+          *ngIf="checkboxValue"
+          class="dateClass pd"
+          data-toggle="tooltip"
+          data-placement="top"
+          title="Toggle remove filter"
+        >
           <label class="checkbox-inline"
             ><input
               type="checkbox"
@@ -35,24 +53,38 @@
             />
             <span> Unmark All completed</span>
           </label>
-        </span>
+        </span> -->
         <!-- End Select All -->
         <!-- Table -->
-        <table class="table">
+        <div class="table-responsive">
+        <table class="table table-light">
           <!-- Table header -->
-          <thead>
+          <thead class="table-dark">
             <tr>
-              <th scope="col" class="text-center"><input
-                type="checkbox"  class="" id="selectAllCheckbox" [checked]="checkedAll" (change)="selectAll($event)"  data-toggle="tooltip" data-placement="top" title="Toggle selection for all items" 
-                
-               
-              /></th>
+              <th scope="col" class="text-center">
+                <input
+                  type="checkbox"
+                  class=""
+                  id="selectAllCheckbox"
+                  [checked]="checkedAll"
+                  (change)="selectAll($event)"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Toggle selection for all items"
+                />
+              </th>
               <th scope="col" class="text-center">Id</th>
               <th scope="col" class="text-center">Task Name</th>
-              <th scope="col" class="text-center" data-toggle="tooltip" data-placement="top" title="Toggle filter for Status">
+              <th
+                scope="col"
+                class="text-center"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Toggle filter for Status"
+              >
                 <select id="inputStatus" (change)="selectOptionStatus($event)">
                   <!-- default option selected -->
-                  <option class="text-center" selected hidden >Status</option>
+                  <option class="text-center" selected hidden>Status</option>
                   <!-- dynamic dropdown values shows here -->
                   <ng-container *ngFor="let option of dropdownOptions">
                     <!-- option value bind using value [value]="option" -->
@@ -80,15 +112,19 @@
           <tbody
             *ngFor="
               let task of filterItems()
-                | paginate : { itemsPerPage: count, currentPage: p }; let i = index
+                | paginate : { itemsPerPage: count, currentPage: p };
+              let i = index
             "
           >
             <!-- text-decoration-line apply here -->
             <tr [class.completed]="task.taskStatus == 'Completed'">
-              <td scope="row" class="text-center" ><input
-                type="checkbox"  [checked]="isSelected(task.id)" (change)="toggleSelection($event,task.id)"
-               
-              /></td>
+              <td scope="row" class="text-center">
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(task.id)"
+                  (change)="toggleSelection($event, task.id)"
+                />
+              </td>
               <td scope="row" class="text-center">{{ task.id }}</td>
               <td class="text-center">{{ task.taskName }}</td>
               <!-- option selection here dynamic and color apply dynamc on selected option-->
@@ -122,7 +158,8 @@
                           : 'rgb(229 222 38)'
                       "
                       [value]="option"
-                      *ngIf="task.taskStatus != option" [class.hidden]="option === 'All'"
+                      *ngIf="task.taskStatus != option"
+                      [class.hidden]="option === 'All'"
                     >
                       {{ option }}
                     </option>
@@ -146,13 +183,14 @@
                   class="btn btn-danger"
                   (click)="openDeleteModal('deleteModal', task.id)"
                 >
-                  <i class="fa fa-trash"> </i> 
+                  <i class="fa fa-trash"> </i>
                 </button>
               </td>
             </tr>
           </tbody>
           <div *ngIf="filterItems().length == 0">No Record Found</div>
         </table>
+      </div>
       </div>
       <div class="containerpg">
         <!-- Add task button-->
@@ -200,7 +238,7 @@
       </div>
     </div>
   </div>
-</div>
+
 
 <!----------------------------- Modal for Add task ---------------------------------->
 <!-- Id is compulsary  -->
@@ -292,7 +330,11 @@
               (change)="selectOption($event, Id)"
             >
               <option selected>Choose...</option>
-              <option *ngFor="let option of dropdownOptions" [value]="option" [class.hidden]="option === 'All'">
+              <option
+                *ngFor="let option of dropdownOptions"
+                [value]="option"
+                [class.hidden]="option === 'All'"
+              >
                 {{ option }}
               </option>
             </select>
@@ -412,7 +454,11 @@
             >
               <option selected>{{ TaskStatus }}</option>
               <ng-container *ngFor="let option of dropdownOptions">
-                <option [value]="option" *ngIf="TaskStatus != option" [class.hidden]="option === 'All'">
+                <option
+                  [value]="option"
+                  *ngIf="TaskStatus != option"
+                  [class.hidden]="option === 'All'"
+                >
                   {{ option }}
                 </option>
               </ng-container>

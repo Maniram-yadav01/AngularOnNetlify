@@ -10,23 +10,8 @@ h1{
 .main {
     max-width: 62%; /* Adjust maximum width to fit mobile screens */
 }
-/* .bg {
-    background-color: #0a1a0659;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: auto; /* Adjust height to auto for responsiveness */
-/* } */
-
-/* .header{
-    display: flex;
-    justify-content: center;
-} */
-
 
 .main-container{
-    margin: 2%;
     margin-top: -20px;
 }
 
@@ -39,10 +24,13 @@ h1{
     float: right;
     margin-right: 20px;
     color: rgb(16, 2, 65);
-    background-color: rgb(161, 121, 203);
     padding: 0 10px;
     border-radius: 20px;
-    /* visibility: hidden; */
+    margin-top: 3px;
+}
+.bdrRadius{
+    border-radius: 20px;
+    background-color: burlywood;
 }
 .pd{
     margin-bottom: 5px;
@@ -55,7 +43,7 @@ h1{
   
   
 .mr{
-    margin-right: 5px;
+    margin: 2px;
 }
 
 .small-dropdown {
@@ -66,21 +54,26 @@ h1{
 
 .divLine {
     display: flex;
-    margin-top: -14px;
     margin-left: 17px;
     margin-bottom: 10px;
 }
 
 .line {
     flex: 1;
-    white-space: nowrap; /* Prevent line breaks */
+}
+.datecls{
+    display: flex;
+}
+.dateline{
+    flex: 1;
+    white-space: nowrap;
+    text-align: right;
+    margin-left: 2px;
 }
 
 .mb{
     margin-bottom: -34px;
 }
-
-
 
 .containerpg{
     display: flex;
@@ -123,7 +116,6 @@ h1{
     text-align: left; /* Align text to the left */
   }
   th {
-    background-color: #f2f2f2; /* Add background color */
     font-size: 14px; /* Decrease font size */
   }
   tr:nth-child(even) {
@@ -134,15 +126,9 @@ h1{
   tr:hover {
     background-color: #d86363; /* Change background color on hover */
   }
-    /* .bg { */
-        /* width: 445px; */
-        /* height: auto; /* Adjust height to auto for responsiveness */
-        /* background-color: aqua;
-    } */ 
     .main {
       /* Adjust maximum width to fit mobile screens */
       max-width: 100%;
-      margin-left: -15px;
       margin-right: 68px;
     
   }
@@ -159,7 +145,8 @@ h1{
 }
 .header {
     text-align: center; /* Center align the header */
-    margin-top: 32px;
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
 
 .hidden{
@@ -169,5 +156,6 @@ h1{
 .btnclass{
     margin: 2px;
     padding: 3px;
+    margin-left: 15px;
 
 }
