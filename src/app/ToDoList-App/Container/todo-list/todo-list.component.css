@@ -91,6 +91,7 @@ h1{
     align-items: center;
     text-align: center;
     margin-right: 5px;
+    margin-bottom: 10px;
 }
 
 .inprogress{
@@ -101,6 +102,7 @@ h1{
     align-items: center;
     text-align: center;
     margin: 5px;
+    margin-bottom: 10px;
 }
 
 .table{
