@@ -6,7 +6,9 @@
     <div class="header">
       <div>
         <span>
-          <p>Selected Count: {{ getSelectedRowCount()}}</p>
+          <button type="button" class="btn btn-danger btnclass" (click)="openDeleteModalbyId('deleteModalIdbyId')">delete</button>
+          <button type="button" class="btn btnclass"><p > <i class="fas fa-times" style="margin-right: 5px;"></i>{{ getSelectedRowCount()}}  Selected</p></button>
+          
         </span>
       </div>
       <h1>TODO LIST <i class="fa fa-pencil"></i></h1>
@@ -31,7 +33,7 @@
           <thead>
             <tr>
               <th scope="col" class="text-center"><input
-                type="checkbox"
+                type="checkbox" [(ngModel)]="checkboxselect" (click)="pushAllid($event)"
                
               /></th>
               <th scope="col" class="text-center">Id</th>
@@ -73,7 +75,7 @@
             <!-- text-decoration-line apply here -->
             <tr [class.completed]="task.taskStatus == 'Completed'">
               <td scope="row" class="text-center" ><input
-                type="checkbox" (change)="toggleSelection($event,i)"
+                type="checkbox"  (change)="toggleSelection($event,i,task.id)"
                
               /></td>
               <td scope="row" class="text-center">{{ task.id }}</td>
@@ -126,14 +128,14 @@
                   (click)="openModal('editModal')"
                   (click)="GetToDoDataById(task.id)"
                 >
-                  <i class="fa fa-edit"> </i>Edit
+                  <i class="fa fa-edit"> </i>
                 </button>
                 <!-- open delete model  -->
                 <button
                   class="btn btn-danger"
                   (click)="openDeleteModal('deleteModal', task.id)"
                 >
-                  <i class="fa fa-trash"> </i> Del
+                  <i class="fa fa-trash"> </i> 
                 </button>
               </td>
             </tr>
@@ -439,6 +441,42 @@
   </div>
 </div>
 
+<!-- Modal for Delete task id by id -->
+<div
+  class="modal"
+  id="deleteModalIdbyId"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title">Delete Task</h1>
+      </div>
+      <div class="modal-body">
+        <h3>Are sure to delete</h3>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeModal('editModal')"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="deleteToDoTaskIdbyId()"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Modal for Delete task -->
 <div
   class="modal"

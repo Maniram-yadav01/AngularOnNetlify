@@ -165,3 +165,9 @@ h1{
 .hidden{
     display: none;
 }
+
+.btnclass{
+    margin: 2px;
+    padding: 3px;
+
+}

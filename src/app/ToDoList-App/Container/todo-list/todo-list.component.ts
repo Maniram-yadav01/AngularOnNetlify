@@ -52,7 +52,9 @@ isDropdownOpen = false;
 filterStatus:string = '';
 selectedOptions:string[] = [];
 selectedRows: number[] = [];
+selectedIds: number[] = [];
 checked:boolean = false;
+checkboxselect:boolean = false;
 
 
 constructor(private service: ToDoListService,private formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {}
@@ -71,6 +73,14 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
   //for specfic delete option open modal
   openDeleteModal(modal: any,id:any) {
     this.deletedId = id;
+    const modelDiv = document.getElementById(modal);
+    if (modelDiv != null) {
+      modelDiv.style.display = 'block';
+    }
+  }
+
+  openDeleteModalbyId(modal:any)
+  {
     const modelDiv = document.getElementById(modal);
     if (modelDiv != null) {
       modelDiv.style.display = 'block';
@@ -216,6 +226,13 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     alert("Data Deleted");
     window.location.reload();
   }
+  deleteToDoTaskIdbyId()
+  {
+    for(let id of this.selectedIds)
+    {
+      this.deleteToDoTask(id)
+    }
+  }
 // Add to Do Task
   addToDoTask(data: any) {
     for(let val of this.toDoList)
@@ -354,17 +371,37 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
       return this.toDoList.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase())); 
   }
 
-  toggleSelection(val:Event, index: number) {
+  toggleSelection(val:Event, index: number,id:any) {
     const target = val.target as HTMLInputElement;
     this.checked = target.checked; 
     if (this.checked) {
       this.selectedRows.push(index);
+      // add selected id 
+      this.selectedIds.push(id);
     } else {
       const selectedIndex = this.selectedRows.indexOf(index);
+      const selectedIds = this.selectedIds.indexOf(id);
       if (selectedIndex !== -1) {
         this.selectedRows.splice(selectedIndex, 1);
+        this.selectedIds.splice(selectedIds, 1);
       }
     }
+  }
+  pushAllid(val:Event)
+  {
+    const target = val.target as HTMLInputElement;
+    this.checked = target.checked; 
+    if(this.checked)
+    {
+      for(let val of this.toDoList)
+      {
+        this.selectedIds.push(val.id);
+      }
+    }
+    else{
+      this.selectedIds = [];
+    }
+   // this.deleteToDoTaskIdbyId()
   }
   getSelectedRowCount(): number {
     return this.selectedRows.length;
