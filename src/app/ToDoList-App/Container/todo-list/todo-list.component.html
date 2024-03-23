@@ -1,8 +1,12 @@
 <div class="datecls">
   <div class="dateline" *ngIf="getSelectedRowCount() != 0">
     <span>
-        <i class="fa fa-trash"  (click)="openDeleteModalbyId('deleteModalIdbyId')"> Delete</i> 
-        <p class="btn btnclass bdrRadius" (click)="selectAll($event)">
+        <i class="fa fa-trash"  (click)="openDeleteModalbyId('deleteModalIdbyId')" data-toggle="tooltip"
+        data-placement="top"
+        title="Delete all selected items"> Delete</i> 
+        <p class="btn btnclass bdrRadius" (click)="selectAll($event)" data-toggle="tooltip"
+        data-placement="top"
+        title="Remove all selected items">
           <i class="fas fa-times" style="margin-right: 5px" (click)="selectAll($event)"></i
           >{{ getSelectedRowCount() }} Selected
         </p>
@@ -23,9 +27,6 @@
     <div class="main-container">
       <div
         *ngIf="toDoList.length != 0"
-        data-toggle="tooltip"
-        data-placement="top"
-        title="Toggle select all"
       >
         <!-- Select All -->
         <!-- <span *ngIf="!checkboxValue" class="dateClass pd">
@@ -174,14 +175,18 @@
                   [disabled]="task.taskStatus == 'Completed'"
                   class="btn btn-success mr"
                   (click)="openModal('editModal')"
-                  (click)="GetToDoDataById(task.id)"
+                  (click)="GetToDoDataById(task.id)" data-toggle="tooltip"
+                  data-placement="top"
+                  title="Edit item"
                 >
                   <i class="fa fa-edit"> </i>
                 </button>
                 <!-- open delete model  -->
                 <button
                   class="btn btn-danger"
-                  (click)="openDeleteModal('deleteModal', task.id)"
+                  (click)="openDeleteModal('deleteModal', task.id)" data-toggle="tooltip"
+                  data-placement="top"
+                  title="Delete item"
                 >
                   <i class="fa fa-trash"> </i>
                 </button>
