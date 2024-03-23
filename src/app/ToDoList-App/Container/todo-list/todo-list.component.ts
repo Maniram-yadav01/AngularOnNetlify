@@ -55,7 +55,7 @@ selectedRows: number[] = [];
 selectedIds: number[] = [];
 checked:boolean = false;
 checkboxselect:boolean = false;
-
+checkedAll:boolean = false;
 
 constructor(private service: ToDoListService,private formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {}
 
@@ -230,8 +230,11 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
   {
     for(let id of this.selectedIds)
     {
-      this.deleteToDoTask(id)
+      this.service.deleteToDoListData(id).subscribe(() => {
+      });
     }
+    alert("Data Deleted");
+    window.location.reload();
   }
 // Add to Do Task
   addToDoTask(data: any) {
@@ -371,40 +374,52 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
       return this.toDoList.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase())); 
   }
 
-  toggleSelection(val:Event, index: number,id:any) {
+  toggleSelection(val:Event,id:any) {
     const target = val.target as HTMLInputElement;
     this.checked = target.checked; 
     if (this.checked) {
-      this.selectedRows.push(index);
       // add selected id 
       this.selectedIds.push(id);
     } else {
-      const selectedIndex = this.selectedRows.indexOf(index);
-      const selectedIds = this.selectedIds.indexOf(id);
-      if (selectedIndex !== -1) {
-        this.selectedRows.splice(selectedIndex, 1);
-        this.selectedIds.splice(selectedIds, 1);
+      const index = this.selectedIds.indexOf(id);
+      if (index !== -1) {
+        
+        this.selectedIds.splice(index, 1);
       }
     }
+    this.checkAllStatus();
   }
-  pushAllid(val:Event)
+  selectAll(val:Event)
   {
     const target = val.target as HTMLInputElement;
     this.checked = target.checked; 
     if(this.checked)
     {
-      for(let val of this.toDoList)
-      {
-        this.selectedIds.push(val.id);
-      }
+      this.selectedIds = this.toDoList.map(item => item.id);
     }
     else{
       this.selectedIds = [];
     }
-   // this.deleteToDoTaskIdbyId()
+    this.checkAllStatus();
   }
+
   getSelectedRowCount(): number {
-    return this.selectedRows.length;
+    return this.selectedIds.length;
+  }
+
+  isSelected(itemId: number): boolean {
+    return this.selectedIds.includes(itemId);
+  }
+
+  checkAllStatus()
+  {
+    if(this.getSelectedRowCount() == this.toDoList.length )
+    {
+      this.checkedAll = true;
+    }
+    else{
+      this.checkedAll = false;
+    }
   }
 }
   
