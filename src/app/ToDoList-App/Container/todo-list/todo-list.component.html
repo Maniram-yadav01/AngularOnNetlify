@@ -4,6 +4,11 @@
       ><i class="fa fa-calendar"></i> Date: {{ today | date : "short" }}</span
     >
     <div class="header">
+      <div>
+        <span>
+          <p>Selected Count: {{ getSelectedRowCount()}}</p>
+        </span>
+      </div>
       <h1>TODO LIST <i class="fa fa-pencil"></i></h1>
     </div>
     <div class="main-container">
@@ -25,6 +30,10 @@
           <!-- Table header -->
           <thead>
             <tr>
+              <th scope="col" class="text-center"><input
+                type="checkbox"
+               
+              /></th>
               <th scope="col" class="text-center">Id</th>
               <th scope="col" class="text-center">Task Name</th>
               <th scope="col" class="text-center">
@@ -58,11 +67,15 @@
           <tbody
             *ngFor="
               let task of filterItems()
-                | paginate : { itemsPerPage: count, currentPage: p }
+                | paginate : { itemsPerPage: count, currentPage: p }; let i = index
             "
           >
             <!-- text-decoration-line apply here -->
             <tr [class.completed]="task.taskStatus == 'Completed'">
+              <td scope="row" class="text-center" ><input
+                type="checkbox" (change)="toggleSelection($event,i)"
+               
+              /></td>
               <td scope="row" class="text-center">{{ task.id }}</td>
               <td class="text-center">{{ task.taskName }}</td>
               <!-- option selection here dynamic and color apply dynamc on selected option-->
@@ -96,7 +109,7 @@
                           : 'rgb(229 222 38)'
                       "
                       [value]="option"
-                      *ngIf="task.taskStatus != option"
+                      *ngIf="task.taskStatus != option" [class.hidden]="option === 'All'"
                     >
                       {{ option }}
                     </option>
@@ -266,7 +279,7 @@
               (change)="selectOption($event, Id)"
             >
               <option selected>Choose...</option>
-              <option *ngFor="let option of dropdownOptions" [value]="option">
+              <option *ngFor="let option of dropdownOptions" [value]="option" [class.hidden]="option === 'All'">
                 {{ option }}
               </option>
             </select>
@@ -386,7 +399,7 @@
             >
               <option selected>{{ TaskStatus }}</option>
               <ng-container *ngFor="let option of dropdownOptions">
-                <option [value]="option" *ngIf="TaskStatus != option">
+                <option [value]="option" *ngIf="TaskStatus != option" [class.hidden]="option === 'All'">
                   {{ option }}
                 </option>
               </ng-container>

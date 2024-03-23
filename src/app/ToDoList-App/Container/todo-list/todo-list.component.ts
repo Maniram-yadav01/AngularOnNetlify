@@ -18,7 +18,7 @@ export class TodoListComponent implements OnInit {
   AddTaskForm!:FormGroup;
   today: number = Date.now();
   formModal: any; // define a variable
-  dropdownOptions: string[] = ['Completed','Pending','In-Progress'];
+  dropdownOptions: string[] = ['All','Completed','Pending','In-Progress'];
   selectedOption: string = '';
   selectedDate: string = '';
   TaskName:any;
@@ -50,6 +50,9 @@ dataForUpdate1:any
 searchText: string = '';
 isDropdownOpen = false;
 filterStatus:string = '';
+selectedOptions:string[] = [];
+selectedRows: number[] = [];
+checked:boolean = false;
 
 
 constructor(private service: ToDoListService,private formBuilder: FormBuilder,private cdr: ChangeDetectorRef) {}
@@ -331,21 +334,40 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     // Implemented search filtering logic here
     //  filter based on taskName containing searchText
     if ( this.filterStatus === 'Completed') {
-      return  this.toDoList.filter(item => item.taskStatus.toLowerCase().includes(this.filterStatus?.toLowerCase()));
-      // Reset filter
+      this.filterItemsdata =  this.toDoList.filter(item => item.taskStatus.toLowerCase().includes(this.filterStatus?.toLowerCase()));
+      this.filterItemsdata = this.filterItemsdata.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase()));
+      return this.filterItemsdata;
     } 
     if ( this.filterStatus === 'Pending') {
-      return  this.toDoList.filter(item => item.taskStatus.toLowerCase().includes(this.filterStatus?.toLowerCase()));
-      // Reset filter
+      this.filterItemsdata =  this.toDoList.filter(item => item.taskStatus.toLowerCase().includes(this.filterStatus?.toLowerCase()));
+      this.filterItemsdata = this.filterItemsdata.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase()));
+      return this.filterItemsdata;
     } 
     if ( this.filterStatus === 'In-Progress') {
-      return  this.toDoList.filter(item => item.taskStatus.toLowerCase().includes(this.filterStatus?.toLowerCase()));
-      // Reset filter
+      this.filterItemsdata =  this.toDoList.filter(item => item.taskStatus.toLowerCase().includes(this.filterStatus?.toLowerCase()));
+      this.filterItemsdata = this.filterItemsdata.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase()));
+      return this.filterItemsdata;
     } 
-    
-      // this.filteredTasks = this.tasks.filter(task => task.status === status);
-      return this.toDoList.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase()));
-    
+    if ( this.filterStatus === 'All') {
+      return this.toDoList.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase())); 
+    } 
+      return this.toDoList.filter(item => item.taskName.toLowerCase().includes(this.toDoSearch?.toLowerCase())); 
+  }
+
+  toggleSelection(val:Event, index: number) {
+    const target = val.target as HTMLInputElement;
+    this.checked = target.checked; 
+    if (this.checked) {
+      this.selectedRows.push(index);
+    } else {
+      const selectedIndex = this.selectedRows.indexOf(index);
+      if (selectedIndex !== -1) {
+        this.selectedRows.splice(selectedIndex, 1);
+      }
+    }
+  }
+  getSelectedRowCount(): number {
+    return this.selectedRows.length;
   }
 }
   
