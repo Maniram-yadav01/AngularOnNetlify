@@ -165,3 +165,7 @@ td.text-center {
     text-align: center; /* Horizontal centering */
     vertical-align: middle; /* Vertical centering */
   }
+.modal-header {
+    height: 44px;
+    padding-top: 26px;
+}

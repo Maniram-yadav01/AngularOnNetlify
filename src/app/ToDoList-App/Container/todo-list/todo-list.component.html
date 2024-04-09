@@ -256,7 +256,7 @@
 >
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header bg-info text-white">
         <h1 class="modal-title">Add Task</h1>
         <button
           type="button"
@@ -398,7 +398,7 @@
 >
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header bg-info text-white">
         <h1 class="modal-title">Edit Task</h1>
         <button
           type="button"
@@ -504,73 +504,53 @@
 </div>
 
 <!-- Modal for Delete task id by id -->
-<div
-  class="modal"
-  id="deleteModalIdbyId"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
+<div class="modal" id="deleteModalIdbyId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title">Delete Task</h1>
+      <div class="modal-header bg-info text-white">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeModal('deleteModalIdbyId')"
+          >
+        </button>
       </div>
       <div class="modal-body">
-        <h3>Are sure to delete</h3>
+        <p class="text-center">Are you sure you want to delete ?</p>
+
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="closeModal('deleteModalIdbyId')"
-          data-bs-dismiss="modal"
-        >
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="deleteToDoTaskIdbyId()"
-        >
-          Delete
-        </button>
+        <div class="">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="closeModal('deleteModalIdbyId')">No</button>
+        </div>
+        <button type="submit" class="btn btn-danger "  (click)="deleteToDoTaskIdbyId()" data-bs-dismiss="modal"
+          (click)="closeModal('deleteModalIdbyId')">
+          Yes</button>
       </div>
     </div>
   </div>
 </div>
+
+
 <!-- Modal for Delete task -->
-<div
-  class="modal"
-  id="deleteModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
+<div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title">Delete Task</h1>
+      <div class="modal-header bg-info text-white">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeModal('deleteModal')"
+          >
+        </button>
       </div>
       <div class="modal-body">
-        <h3>Are sure to delete</h3>
+        <p class="text-center">Are you sure you want to delete ?</p>
+
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="closeModal('deleteModal')"
-          data-bs-dismiss="modal"
-        >
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="deleteToDoTask(deletedId)"
-        >
-          Delete
-        </button>
+        <div class="">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="closeModal('deleteModal')">No</button>
+        </div>
+        <button type="submit" class="btn btn-danger " (click)="deleteToDoTask(deletedId)" data-bs-dismiss="modal"
+          (click)="closeModal('deleteModal')">
+          Yes</button>
       </div>
     </div>
   </div>
