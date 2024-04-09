@@ -90,9 +90,10 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
   closeModal(modal: any) {
     const modelDiv = document.getElementById(modal);
     if (modelDiv != null) {
+      this.AddTaskForm.reset();
       modelDiv.style.display = 'none';
     }
-    window.location.reload();
+    // window.location.reload();
   }
 
   async ngOnInit() {
@@ -125,6 +126,8 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
   this.service.getToDoListData().subscribe((res: any) => {
     this.toDoList = res;
     this.SelectStatus();
+    this.getSelectedRowCount();
+    this.checkAllStatus();
   });
 }
   //Form Related
@@ -224,7 +227,9 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     this.service.deleteToDoListData(Id).subscribe(() => {
     });
     alert("Data Deleted");
-    window.location.reload();
+    this.GetToDoTaskData();
+    this.closeModal('deleteModal');
+    // window.location.reload();
   }
   deleteToDoTaskIdbyId()
   {
@@ -234,10 +239,14 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
       });
     }
     alert("Data Deleted");
-    window.location.reload();
+    this.closeModal('deleteModalIdbyId');
+    this.GetToDoTaskData();
+    this.selectedIds = [];
+    this.getSelectedRowCount();
+    // window.location.reload();
   }
 // Add to Do Task
-  addToDoTask(data: any) {
+   addToDoTask(data: any) {
     for(let val of this.toDoList)
     {
      if(val.id == data.Id)
@@ -261,7 +270,9 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
       this.service.AddToDoListData(data).subscribe((res) => {
       });
       alert("Data Successfull saved");
-      window.location.reload();
+      this.GetToDoTaskData();
+      this.closeModal('AddModal');
+      // window.location.reload();
     }
     else{
       alert("Data already exist");
@@ -276,7 +287,9 @@ constructor(private service: ToDoListService,private formBuilder: FormBuilder,pr
     this.service.updateToDoListData(this.dataForUpdate1).subscribe((res:any) => {
     });
     alert("Data  Updated successfull");
-    window.location.reload();
+    this.GetToDoTaskData();
+    this.closeModal('editModal');
+    // window.location.reload();
   }
 
   //Get To Do Task by id

@@ -378,7 +378,7 @@
         <button
           type="submit"
           class="btn btn-primary"
-          (click)="addToDoTask(AddTaskForm.value)"
+          (click)="addToDoTask(AddTaskForm.value)" 
           [disabled]="!AddTaskForm.valid"
         >
           Save changes
@@ -523,7 +523,7 @@
         <button
           type="button"
           class="btn btn-secondary"
-          (click)="closeModal('editModal')"
+          (click)="closeModal('deleteModalIdbyId')"
           data-bs-dismiss="modal"
         >
           Close
@@ -559,7 +559,7 @@
         <button
           type="button"
           class="btn btn-secondary"
-          (click)="closeModal('editModal')"
+          (click)="closeModal('deleteModal')"
           data-bs-dismiss="modal"
         >
           Close
